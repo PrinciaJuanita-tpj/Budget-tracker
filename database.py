@@ -85,3 +85,30 @@ def supprimer_depense(d_id):
         return False
     else:
         return True
+
+def consulter_depenses(annee_mois):
+    """Calcule le montant total dépensé par catégorie pour un mois donné.
+
+    Paramètre :
+        annee_mois (str) : Mois ciblé au format 'AAAA-MM' (ex: '2026-09')
+
+    Retourne :
+        list[tuple[str, float]] : Liste de tuples contenant chacun la catégorie
+        et la somme dépensée (ex: [('Courses', 120.5), ('Loisirs', 45.0)]).
+        Retourne une liste vide si aucune dépense n'est trouvée.
+    """
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute(
+    """
+        SELECT categorie, SUM(montant)
+        FROM depenses
+        WHERE date LIKE ?
+        GROUP BY categorie
+    """, (annee_mois+"%",)
+        ) #filtre
+    lignes = cursor.fetchall() #toutes les lignes trouvées par le filtre
+    conn.close()
+    return lignes
+
+    
