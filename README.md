@@ -3,14 +3,14 @@
 
 ## Description
 
-Application console légère développée en Python permettant de suivre et d'analyser ses dépenses personnelles au quotidien à l'aide d'une base de données relationnelle locale SQLite.
+Application légère développée en Python permettant de suivre et d'analyser ses dépenses personnelles au quotidien à l'aide d'une base de données relationnelle locale SQLite. Elle propose au choix une interface graphique (GUI) interactive ou une interface en ligne de commande (CLI).
 
 ---
 
 ## 💡 Vision du Projet
 
 
-* **Exécution directe au clavier** : une interface en ligne de commande claire pour saisir ses dépenses en quelques secondes sans ouvrir un tableur lourd.
+* **Double interface au choix** : une interface graphique intuitive (`gui.py`) pour une gestion visuelle, ou une interface console rapide (`main.py`) pour les adeptes du terminal.
 
 * **Architecture modulaire** : séparation stricte entre l'interface utilisateur (`main.py`) et la persistance des données (`database.py`).
 
@@ -34,8 +34,13 @@ Liste de toutes les dépenses de la plus récente à la plus anciennes.
 ## 🛠️ Stack Technique
 
 - **Langage** : Python 3.14.7
+
 - **Base de données** : SQLite (via le module standard `sqlite3`)
-- **Interface** : Ligne de commande 
+
+- **Interface graphique** : Tkinter / ttk (inclus dans la bibliothèque standard)
+
+- **Interface console** : CLI interactive (terminal)
+
 - **Versionnement** : Git & GitHub
 
 ---
@@ -45,10 +50,11 @@ Liste de toutes les dépenses de la plus récente à la plus anciennes.
 ```text
 Budget-tracker/
 │
-├── .gitignore        # Fichiers exclus du versionnement (*.db, __pycache__)
-├── README.md         # Documentation du projet
-├── database.py       # Logique d'accès aux données et requêtes SQL
-└── main.py           # Point d'entrée de l'application et menu interactif
+├── .gitignore         # Fichiers exclus du versionnement (*.db, __pycache__)
+├── README.md          # Documentation du projet
+├── database.py        # Logique d'accès aux données et requêtes SQL
+├── gui.py             # Interface graphique utilisateur (Tkinter)
+└── main.py            # Point d'entrée de l'application console (CLI)
 ```
 ---
 
@@ -77,6 +83,11 @@ Description : Courses de la semaine chez Lidl
 1. Cloner le projet sur votre machine
 
 2. Lancer l'application :
-   ```bash
+   * **Version graphique :**
+     ```bash
+     python gui.py
+     ```
+   * **Version console :**
+     ```bash
      python main.py
-    ```
+     ```
