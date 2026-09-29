@@ -5,6 +5,11 @@ DB_NAME = "budget.db"
 
 
 def init_db():
+    """
+    Initialise la base de données.
+    Crée la table 'depenses' si elle n'existe pas encore.
+    """
+    
     # 1. On ouvre le fichier de la base (il se crée tout seul s'il n'existe pas)
     conn = sqlite3.connect(DB_NAME)
 
@@ -29,6 +34,18 @@ def init_db():
     conn.close()
     
 def ajouter_depense(date,categorie,montant,description=""):
+    """
+    Insère une nouvelle dépense dans la base de données.
+
+    Paramètres :
+        date (str) : Date de l'opération au format 'AAAA-MM-JJ'
+        categorie (str) : Catégorie associée (ex: 'Alimentation', 'Transport')
+        montant (float) : Montant payé
+        description (str, optionnel) : Détail ou note sur la dépense
+
+    Retourne :
+        int : L'identifiant unique (id) attribué à la ligne insérée.
+    """
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("""
@@ -42,3 +59,29 @@ def ajouter_depense(date,categorie,montant,description=""):
     nouvel_id = cursor.lastrowid #récupère le numéro d'identifiant (id) que SQLite vient tout juste de générer automatiquement
     conn.close()
     return nouvel_id
+
+def supprimer_depense(d_id):
+    """
+    Supprime une dépense existante à partir de son identifiant.
+    
+    Paramètre :
+        id (int) : L'id de la dépense à supprimer
+        
+    Retourne :
+        bool : True si la ligne a bien été supprimée, False si l'id n'existait pas.
+    """
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("""
+        DELETE FROM depenses
+        WHERE id = ?
+    """,(d_id,)
+        ) #supprime la ligne de la table
+
+    conn.commit()
+    lignes_Affectees = cursor.rowcount #recupère nombre de lignes affectées par la suppression
+    conn.close()
+    if lignes_Affectees == 0: #verifie la suppression
+        return False
+    else:
+        return True
