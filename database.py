@@ -79,6 +79,10 @@ def supprimer_depense(d_id):
         ) #supprime la ligne de la table
 
     conn.commit()
+    
+    # Appel automatique : si c'était la dernière ligne, on remet l'ID à 1
+    reinitialiser_sequence_si_vide()
+    
     lignes_Affectees = cursor.rowcount #recupère nombre de lignes affectées par la suppression
     conn.close()
     if lignes_Affectees == 0: #verifie la suppression
@@ -131,3 +135,44 @@ def lister_toutes_depenses():
     conn.close()
     return lignes
     
+def filtrer_depenses(annee=None, mois=None, jour=None, categorie=None):
+    """Filtre les dépenses selon les critères fournis (tous optionnels et indépendants)."""
+    requete = "SELECT id, date, categorie, montant, description FROM depenses WHERE 1=1"
+    parametres = []
+
+    if annee:
+        requete += " AND strftime('%Y', date) = ?"
+        parametres.append(str(annee))
+
+    if mois:
+        requete += " AND strftime('%m', date) = ?"
+        parametres.append(f"{int(mois):02d}")
+
+    if jour:
+        requete += " AND strftime('%d', date) = ?"
+        parametres.append(f"{int(jour):02d}")
+
+    if categorie and categorie != "Toutes":
+        requete += " AND categorie = ?"
+        parametres.append(categorie)
+
+    requete += " ORDER BY date DESC"
+
+    conn = sqlite3.connect(DB_NAME)
+    curseur = conn.cursor()
+    curseur.execute(requete, parametres)
+    return curseur.fetchall()
+    
+def reinitialiser_sequence_si_vide():
+    """Réinitialise l'auto-incrément si la table des dépenses est totalement vide."""
+    conn = sqlite3.connect(DB_NAME)
+    curseur = conn.cursor()
+    curseur.execute("SELECT COUNT(*) FROM depenses")
+    nb = curseur.fetchone()[0] #Le nombre de depenses
+    
+    # Si la table ne contient plus aucun enregistrement
+    if nb == 0:
+        # Supprime la mémoire du dernier ID attribué dans la table système SQLite
+        curseur.execute("DELETE FROM sqlite_sequence WHERE name='depenses'")
+        # Valide définitivement la transaction sur le disque
+        conn.commit()
