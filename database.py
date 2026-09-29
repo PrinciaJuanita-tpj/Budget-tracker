@@ -111,4 +111,23 @@ def consulter_depenses(annee_mois):
     conn.close()
     return lignes
 
+def lister_toutes_depenses():
+    """
+    Récupère l'ensemble des dépenses enregistrées en base,
+    triées de la plus récente à la plus ancienne.
+
+    Retourne :
+        list[tuple] : Liste de tuples contenant (id, date, categorie, montant, description).
+    """
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute(
+    """
+        SELECT *
+        FROM depenses
+        ORDER BY date DESC
+    """, ) 
+    lignes = cursor.fetchall() #toutes les lignes trouvées par le filtre
+    conn.close()
+    return lignes
     

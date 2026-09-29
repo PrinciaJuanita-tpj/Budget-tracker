@@ -26,6 +26,9 @@ Application console légère développée en Python permettant de suivre et d'an
 
 3. **Supprimer une dépense** : suppression d'une entrée à partir de son numéro d'identifiant (`id`).
 
+4. **Lister toutes les dépenses** : 
+Liste de toutes les dépenses de la plus récente à la plus anciennes.
+
 ---
 
 ## 🛠️ Stack Technique
@@ -56,7 +59,8 @@ Budget-tracker/
 1. Ajouter une dépense
 2. Consulter les dépenses
 3. Supprimer une dépense
-4. Quitter
+4. Lister toutes les dépenses
+5. Quitter
 
 --- Nouvelle dépense ---
 Date (AAAA-MM-JJ, Entrée pour aujourd'hui) : 2026-09-29

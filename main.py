@@ -7,7 +7,8 @@ def afficher_menu():
     print("1. Ajouter une dépense")
     print("2. Consulter les dépenses")
     print("3. Supprimer une dépense")
-    print("4. Quitter")
+    print("4. Lister toutes les dépenses")
+    print("5. Quitter")
 
 
 def action_ajouter():
@@ -101,7 +102,20 @@ def action_supprimer():
     else :
         print(f"Aucune dépense de numero {i}")
 
+def action_lister():
+    """Récupère l'historique complet des dépenses enregistrées
 
+    et affiche chaque ligne détaillée avec son identifiant.
+    """
+    l = database.lister_toutes_depenses()
+    if not l :
+        print("Aucune dépense enregistrée !")
+    else :
+        print("== Depenses ==")
+        for i,d,c,m,desc in l :
+            print(f"ID : {i} | Date : {d} | Catégorie : {c} | Montant : {m:.2f}€ | Description : {desc}")
+    
+        
 def main():
     """
     Point d'entrée du programme : initialise la base de données
@@ -123,6 +137,8 @@ def main():
         elif choix == '3':
             action_supprimer()
         elif choix == '4':
+            action_lister()
+        elif choix == '5':
             print("Au revoir !")
             break
         else:
